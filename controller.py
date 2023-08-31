@@ -7,6 +7,7 @@ import nnpy
 import socket
 import math
 from jpt_algo_evaluation.jpt_algo import calculate_complex_voltage, jpt_algo, phase_angle_and_magnitude_from_complex_voltage, calculate_approximation_error, calculate_angle_error
+from matrix.fillIn import fillIn
 from statistics import mean, stdev
 from sorted_list import KeySortedList
 from threading import Thread
@@ -206,7 +207,7 @@ def on_digest_recv(msg):
     #pmu_packet = pmu_packet_parser(msg)
     #offset = 36
     controller_phasor_info_packet_length = 16
-    controller_phasor_info_packet_count = 3
+    controller_phasor_info_packet_count = 6
 
     # the extra 8 here is for the most current timestamp
     offset = controller_phasor_info_packet_length * controller_phasor_info_packet_count + 8
@@ -219,12 +220,17 @@ def on_digest_recv(msg):
         msg_copy = msg[0:]
         last_stored_soc = 0
         last_stored_fracsec = 0
+        matrix_mag =[]
+        matrix_angle = []
         # extracting phasor data from digest messages
         for j in range(controller_phasor_info_packet_count):
             frac = int.from_bytes(msg_copy[4:8], byteorder="big")
             soc = int.from_bytes(msg_copy[0:4], byteorder="big")
             phasor = parse_phasors(msg_copy[8:controller_phasor_info_packet_length])
+            print(phasor)
 
+            matrix_mag.append(phasor[0]["magnitude"])
+            matrix_angle.append(phasor[0]["angle"])
 
             pmu_recovery_data_buffer.insert({"timestamp": soc + frac / 1000000, "magnitude": phasor[0]["magnitude"], "phase_angle": phasor[0]["angle"]})
             #top of receive stack = most recent measurement
@@ -242,11 +248,18 @@ def on_digest_recv(msg):
 
         #getting last 3 measurements from pmu_data buffer
         jpt_inputs = list(map(lambda pmu_data: calculate_complex_voltage(pmu_data["magnitude"], pmu_data["phase_angle"]), pmu_recovery_data_buffer.get_last_n(3)))
+        # print(pmu_recovery_data_buffer.get_last_n(6))
+
+
+        pred_mag = fillIn(matrix_mag)
+        pred_ang = fillIn(matrix_angle)
+        print(matrix_mag , x)
 
         #put measurements in correct order for current recovery functions
         jpt_inputs.reverse()
 
         missing_packets = calc_missing_packet_count(curr_soc, curr_fracsec, last_stored_soc, last_stored_fracsec)
+        missing_packets = 0  # testing
 
         missing_packet_counter += missing_packets
         print("NUM MISSING TOTAL: " + str(missing_packet_counter))

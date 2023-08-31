@@ -964,8 +964,20 @@ struct jpt_pmu_triplet_t {
   bit<32> soc2;
   bit<32> fracsec2;
   bit<64> phasors2;
+
+  bit<32> soc0_h3;
+  bit<32> fracsec0_h3;
+  bit<64> phasors0_h3;
+  bit<32> soc1_h3;
+  bit<32> fracsec1_h3;
+  bit<64> phasors1_h3;
+  bit<32> soc2_h3;
+  bit<32> fracsec2_h3;
+  bit<64> phasors2_h3;
+
   bit<32> curr_soc;
   bit<32> curr_fracsec;
+
   //bit<16>   sync0;
 }
 struct metadata {
@@ -1043,7 +1055,7 @@ struct phasor_t {
 control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
-
+    //h1
     register<bit<32>>(3) frac_sec_regs;
     register<bit<32>>(3) soc_regs;
     register<bit<32>>(3) magnitude_regs;
@@ -1058,6 +1070,22 @@ control MyIngress(inout headers hdr,
 
     bit<32> temp_mag;
     bit<32> temp_ang;
+
+    //h3
+    register<bit<32>>(3) frac_sec_regs_h3;
+    register<bit<32>>(3) soc_regs_h3;
+    register<bit<32>>(3) magnitude_regs_h3;
+    register<bit<32>>(3) phase_angle_regs_h3;
+    register<bit<32>>(3) R1_h3;
+
+
+    bit<32> new_reg3_h3;
+    bit<32> new_reg2_h3;
+
+    bit<32> digest_counter_h3;
+
+    bit<32> temp_mag_h3;
+    bit<32> temp_ang_h3;
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -1090,6 +1118,33 @@ control MyIngress(inout headers hdr,
         phase_angle_regs.write((bit<32>)0, (bit<32>)hdr.pmu.phasors);
     }
 
+    action update_registers_h3() {
+        //0 is top of stackssss
+        frac_sec_regs_h3.read(new_reg3_h3, (bit<32>)1);
+        frac_sec_regs_h3.read(new_reg2_h3, (bit<32>)0);
+        frac_sec_regs_h3.write((bit<32>)2, new_reg3_h3);
+        frac_sec_regs_h3.write((bit<32>)1, new_reg2_h3);
+        frac_sec_regs_h3.write((bit<32>)0, hdr.pmu.fracsec);
+
+        soc_regs_h3.read(new_reg3_h3, (bit<32>)1);
+        soc_regs_h3.read(new_reg2_h3, (bit<32>)0);
+        soc_regs_h3.write((bit<32>)2, new_reg3_h3);
+        soc_regs_h3.write((bit<32>)1, new_reg2_h3);
+        soc_regs_h3.write((bit<32>)0, hdr.pmu.soc);
+
+        magnitude_regs_h3.read(new_reg3_h3, (bit<32>)1);
+        magnitude_regs_h3.read(new_reg2_h3, (bit<32>)0);
+        magnitude_regs_h3.write((bit<32>)2, new_reg3_h3);
+        magnitude_regs_h3.write((bit<32>)1, new_reg2_h3);
+        magnitude_regs_h3.write((bit<32>)0, (bit<32>)(hdr.pmu.phasors >> 32));
+
+        phase_angle_regs_h3.read(new_reg3_h3, (bit<32>)1);
+        phase_angle_regs_h3.read(new_reg2_h3, (bit<32>)0);
+        phase_angle_regs_h3.write((bit<32>)2, new_reg3_h3);
+        phase_angle_regs_h3.write((bit<32>)1, new_reg2_h3);
+        phase_angle_regs_h3.write((bit<32>)0, (bit<32>)hdr.pmu.phasors);
+    }
+
     action send_pmu_to_control_plane() {
         // 0 is top of stack and most recent packets
 
@@ -1117,8 +1172,66 @@ control MyIngress(inout headers hdr,
         meta.jpt_packet.curr_soc = hdr.pmu.soc;
         meta.jpt_packet.curr_fracsec = hdr.pmu.fracsec;
 
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)0);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)0);
+        meta.jpt_packet.phasors0_h3 = temp_mag_h3 ++ temp_ang_h3;
+        //meta.jpt_packet.sync0 = hdr.pmu.sync;
+        soc_regs_h3.read(meta.jpt_packet.soc0, (bit<32>)0);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec0, (bit<32>)0);
+
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)1);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)1);
+        meta.jpt_packet.phasors1_h3 = temp_mag_h3 ++ temp_ang_h3;
+        soc_regs_h3.read(meta.jpt_packet.soc1, (bit<32>)1);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec1, (bit<32>)1);
+
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)2);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)2);
+        meta.jpt_packet.phasors2_h3 = temp_mag_h3 ++ temp_ang_h3;
+        soc_regs_h3.read(meta.jpt_packet.soc2, (bit<32>)2);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec2, (bit<32>)2);
+
+
+
+        meta.jpt_packet.curr_soc = hdr.pmu.soc;
+        meta.jpt_packet.curr_fracsec = hdr.pmu.fracsec;
+
+
+
         digest(1, meta.jpt_packet);
     }
+
+    /*
+    action send_pmu_to_control_plane_h3() {
+        // 0 is top of stack and most recent packets
+
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)0);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)0);
+        meta.jpt_packet.phasors0 = temp_mag_h3 ++ temp_ang_h3;
+        //meta.jpt_packet.sync0 = hdr.pmu.sync;
+        soc_regs_h3.read(meta.jpt_packet.soc0, (bit<32>)0);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec0, (bit<32>)0);
+
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)1);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)1);
+        meta.jpt_packet.phasors1 = temp_mag ++ temp_ang;
+        soc_regs_h3.read(meta.jpt_packet.soc1, (bit<32>)1);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec1, (bit<32>)1);
+
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)2);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)2);
+        meta.jpt_packet.phasors2 = temp_mag ++ temp_ang;
+        soc_regs_h3.read(meta.jpt_packet.soc2, (bit<32>)2);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec2, (bit<32>)2);
+
+
+
+        meta.jpt_packet.curr_soc = hdr.pmu.soc;
+        meta.jpt_packet.curr_fracsec = hdr.pmu.fracsec;
+
+        digest(1, meta.jpt_packet);
+    }
+    */
 
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
         standard_metadata.egress_spec = port;
@@ -1140,15 +1253,16 @@ control MyIngress(inout headers hdr,
         default_action = drop();
     }
 
+    register<bit<32>>(1) ipaddr;
     apply {
         //disable hdr is valid for speed test
         if (hdr.ipv4.isValid()) {
-            //based on the ip source address, update registers value
 
-            if (hdr.ipv4.srcAddr == 0x0A000303){ // 0x0A000001 = ip:10.0.0.1
-              bit<32> temp_soc;
-              bit<32> temp_frac_sec;
-              //if not generated packet
+            ipaddr.write(0,hdr.ipv4.srcAddr);
+            bit<32> temp_soc;
+            bit<32> temp_frac_sec;
+            //if not generated packet
+            if(hdr.ipv4.srcAddr == 0x0a000101){ //h1
               if(hdr.pmu.stat == (bit<16>)0x0)
               {
                 R1.read(digest_counter, 0);
@@ -1177,10 +1291,39 @@ control MyIngress(inout headers hdr,
                 hdr.pmu.chk = (bit<16>)standard_metadata.ingress_global_timestamp;
                 */
               }
-            }else{//testing. only have two hosts for now
-
             }
+            else if(hdr.ipv4.srcAddr == 0x0a000303){ //h3
+              if(hdr.pmu.stat == (bit<16>)0x0)
+              {
+                R1_h3.read(digest_counter_h3, 0);
+                digest_counter_h3 = digest_counter_h3 + 1;
+                R1_h3.write(0, digest_counter_h3);
+                soc_regs_h3.read(temp_soc, (bit<32>)0);
+                frac_sec_regs_h3.read(temp_frac_sec, (bit<32>)0);
 
+                bit<32> soc_diff_in_frac_sec = (hdr.pmu.soc - temp_soc) * 1000000;
+                bit<32> frac_sec_diff = soc_diff_in_frac_sec - temp_frac_sec + hdr.pmu.fracsec;
+
+
+                if(frac_sec_diff > 20000 && temp_soc != 0) //gives a bit of "breathing room" for measurements
+                {
+                  //SPEED_TEST: attaching local timestamp of when packets sent to control plane
+                  /*hdr.pmu.analog = (bit<32>)standard_metadata.ingress_global_timestamp;*/
+                  /*send_pmu_to_control_plane();*/
+                }
+
+
+                update_registers_h3();
+              }
+              else
+              {
+                //SPEED_TEST: attaching local timestamp of arrival from control plane
+                /*
+                hdr.pmu.digital = (bit<16>)(standard_metadata.ingress_global_timestamp >> 16);
+                hdr.pmu.chk = (bit<16>)standard_metadata.ingress_global_timestamp;
+                */
+              }
+            }
 
 
             ipv4_lpm.apply();

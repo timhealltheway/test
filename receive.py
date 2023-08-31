@@ -78,7 +78,7 @@ def process_pmu_packet(raw_pmu_packet, received_counter):
     pmu_data = pmu_packet_parser(raw_pmu_packet)
     pmu_data["received_at"] = datetime.now()
     sorted_pmus.insert(pmu_data)
-    #print(str(received_counter) + " : " + str(pmu_data["sync"]) + " | " + "Magnitude: " + str(pmu_data["phasors"][0]["magnitude"]) + " | Phase_angle: " + str(pmu_data["phasors"][0]["angle"]))
+    print(str(received_counter) + " : " + str(pmu_data["sync"]) + " | " + "Magnitude: " + str(pmu_data["phasors"][0]["magnitude"]) + " | Phase_angle: " + str(pmu_data["phasors"][0]["angle"]))
 
 
 def listen_for_pmu_queue(q, terminate_after):
@@ -113,4 +113,3 @@ if __name__ == "__main__":
 
     serverSock.close()
     sorted_pmus.write_to_csv(args.filename)
-
