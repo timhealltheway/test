@@ -92,6 +92,30 @@ def generate_new_packets(interface, num_packets, initial_jpt_inputs, last_stored
         last_stored_fracsec = new_frac
         jpt_inputs = [complex_voltage_estimate] + jpt_inputs[0:2]
 
+def generate_new_packets_matrix(interface, num_packets, initial_jpt_inputs, last_stored_soc, last_stored_fracsec, curr_soc, curr_fracsec,mag,pa):
+    # jpt_inputs = initial_jpt_inputs[0:]
+    for i in range(num_packets):
+        new_soc = last_stored_soc
+        new_frac = last_stored_fracsec + 16666
+        generated_mag = mag
+        generated_pa = pa
+        if (new_frac) / 1000000 >= 1:
+            new_frac = (new_frac) % 1000000
+            new_soc = new_soc + 1
+
+        #make sure not generating too many
+        #print(str((curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac)))
+        if (curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac) > 16000:
+            pmu_recovery_data_buffer.insert({"timestamp": new_soc + new_frac / 1000000, "magnitude": generated_mag, "phase_angle": generated_pa})
+            generate_new_packet("s1-eth2", new_soc, new_frac, generated_mag, generated_pa)
+            #time.sleep(.017)
+
+
+        last_stored_soc = new_soc
+        last_stored_fracsec = new_frac
+
+
+
 
 
 def generate_new_packet(interface, soc_in, frac_sec_in, voltage, angle, settings={"pmu_measurement_bytes": 8, "destination_ip": "10.0.2.2", "destination_port": 4712}):
@@ -207,7 +231,7 @@ def on_digest_recv(msg):
     #pmu_packet = pmu_packet_parser(msg)
     #offset = 36
     controller_phasor_info_packet_length = 16
-    controller_phasor_info_packet_count = 6
+    controller_phasor_info_packet_count = 17
 
     # the extra 8 here is for the most current timestamp
     offset = controller_phasor_info_packet_length * controller_phasor_info_packet_count + 8
@@ -253,7 +277,7 @@ def on_digest_recv(msg):
 
         pred_mag = fillIn(matrix_mag)
         pred_ang = fillIn(matrix_angle)
-        print(matrix_mag , x)
+        print("pred mag:", pred_mag, " | ", "pred angle: ", pred_ang)
 
         #put measurements in correct order for current recovery functions
         jpt_inputs.reverse()
@@ -267,7 +291,7 @@ def on_digest_recv(msg):
 
 
         if len(jpt_inputs) > 2:
-            generate_new_packets("s1-eth2", missing_packets, jpt_inputs, last_stored_soc, last_stored_fracsec, curr_soc, curr_fracsec)
+            generate_new_packets_matrix("s1-eth2", missing_packets, jpt_inputs, last_stored_soc, last_stored_fracsec, curr_soc, curr_fracsec,pred_mag,pred_ang)
 
         #move to next digest packet
         msg = msg[offset:]

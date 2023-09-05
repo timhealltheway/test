@@ -55,6 +55,13 @@ actions {
 }
 actions {
   preamble {
+    id: 30542027
+    name: "MyIngress.update_registers_h4"
+    alias: "update_registers_h4"
+  }
+}
+actions {
+  preamble {
     id: 21813473
     name: "MyIngress.send_pmu_to_control_plane"
     alias: "send_pmu_to_control_plane"
@@ -90,7 +97,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 5
 }
 registers {
   preamble {
@@ -105,7 +112,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 5
 }
 registers {
   preamble {
@@ -120,7 +127,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 5
 }
 registers {
   preamble {
@@ -135,7 +142,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 5
 }
 registers {
   preamble {
@@ -150,7 +157,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 5
 }
 registers {
   preamble {
@@ -165,7 +172,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 6
 }
 registers {
   preamble {
@@ -180,7 +187,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 6
 }
 registers {
   preamble {
@@ -195,7 +202,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 6
 }
 registers {
   preamble {
@@ -210,7 +217,7 @@ registers {
       }
     }
   }
-  size: 3
+  size: 6
 }
 registers {
   preamble {
@@ -225,7 +232,82 @@ registers {
       }
     }
   }
-  size: 3
+  size: 6
+}
+registers {
+  preamble {
+    id: 376670495
+    name: "MyIngress.frac_sec_regs_h4"
+    alias: "frac_sec_regs_h4"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 32
+      }
+    }
+  }
+  size: 6
+}
+registers {
+  preamble {
+    id: 376010204
+    name: "MyIngress.soc_regs_h4"
+    alias: "soc_regs_h4"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 32
+      }
+    }
+  }
+  size: 6
+}
+registers {
+  preamble {
+    id: 380091304
+    name: "MyIngress.magnitude_regs_h4"
+    alias: "magnitude_regs_h4"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 32
+      }
+    }
+  }
+  size: 6
+}
+registers {
+  preamble {
+    id: 372815414
+    name: "MyIngress.phase_angle_regs_h4"
+    alias: "phase_angle_regs_h4"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 32
+      }
+    }
+  }
+  size: 6
+}
+registers {
+  preamble {
+    id: 385489822
+    name: "MyIngress.R1_h4"
+    alias: "R1_h4"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 32
+      }
+    }
+  }
+  size: 6
 }
 registers {
   preamble {
@@ -349,6 +431,66 @@ type_info {
         }
       }
       members {
+        name: "soc3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
         name: "soc0_h3"
         type_spec {
           bitstring {
@@ -430,6 +572,276 @@ type_info {
       }
       members {
         name: "phasors2_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc3_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec3_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors3_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc4_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec4_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors4_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc5_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec5_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors5_h3"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc0_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec0_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors0_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc1_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec1_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors1_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc2_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec2_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors2_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc3_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec3_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors3_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc4_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec4_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors4_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 64
+            }
+          }
+        }
+      }
+      members {
+        name: "soc5_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "fracsec5_h4"
+        type_spec {
+          bitstring {
+            bit {
+              bitwidth: 32
+            }
+          }
+        }
+      }
+      members {
+        name: "phasors5_h4"
         type_spec {
           bitstring {
             bit {

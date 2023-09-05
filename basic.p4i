@@ -964,7 +964,14 @@ struct jpt_pmu_triplet_t {
   bit<32> soc2;
   bit<32> fracsec2;
   bit<64> phasors2;
+  bit<32> soc3;
+  bit<32> fracsec3;
+  bit<64> phasors3;
+  bit<32> soc4;
+  bit<32> fracsec4;
+  bit<64> phasors4;
 
+  //h3
   bit<32> soc0_h3;
   bit<32> fracsec0_h3;
   bit<64> phasors0_h3;
@@ -974,6 +981,36 @@ struct jpt_pmu_triplet_t {
   bit<32> soc2_h3;
   bit<32> fracsec2_h3;
   bit<64> phasors2_h3;
+  bit<32> soc3_h3;
+  bit<32> fracsec3_h3;
+  bit<64> phasors3_h3;
+  bit<32> soc4_h3;
+  bit<32> fracsec4_h3;
+  bit<64> phasors4_h3;
+  bit<32> soc5_h3;
+  bit<32> fracsec5_h3;
+  bit<64> phasors5_h3;
+
+  //h4
+  bit<32> soc0_h4;
+  bit<32> fracsec0_h4;
+  bit<64> phasors0_h4;
+  bit<32> soc1_h4;
+  bit<32> fracsec1_h4;
+  bit<64> phasors1_h4;
+  bit<32> soc2_h4;
+  bit<32> fracsec2_h4;
+  bit<64> phasors2_h4;
+  bit<32> soc3_h4;
+  bit<32> fracsec3_h4;
+  bit<64> phasors3_h4;
+  bit<32> soc4_h4;
+  bit<32> fracsec4_h4;
+  bit<64> phasors4_h4;
+  bit<32> soc5_h4;
+  bit<32> fracsec5_h4;
+  bit<64> phasors5_h4;
+
 
   bit<32> curr_soc;
   bit<32> curr_fracsec;
@@ -1056,13 +1093,14 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
     //h1
-    register<bit<32>>(3) frac_sec_regs;
-    register<bit<32>>(3) soc_regs;
-    register<bit<32>>(3) magnitude_regs;
-    register<bit<32>>(3) phase_angle_regs;
-    register<bit<32>>(3) R1;
+    register<bit<32>>(5) frac_sec_regs;
+    register<bit<32>>(5) soc_regs;
+    register<bit<32>>(5) magnitude_regs;
+    register<bit<32>>(5) phase_angle_regs;
+    register<bit<32>>(5) R1;
 
-
+    bit<32> new_reg5;
+    bit<32> new_reg4;
     bit<32> new_reg3;
     bit<32> new_reg2;
 
@@ -1072,13 +1110,15 @@ control MyIngress(inout headers hdr,
     bit<32> temp_ang;
 
     //h3
-    register<bit<32>>(3) frac_sec_regs_h3;
-    register<bit<32>>(3) soc_regs_h3;
-    register<bit<32>>(3) magnitude_regs_h3;
-    register<bit<32>>(3) phase_angle_regs_h3;
-    register<bit<32>>(3) R1_h3;
+    register<bit<32>>(6) frac_sec_regs_h3;
+    register<bit<32>>(6) soc_regs_h3;
+    register<bit<32>>(6) magnitude_regs_h3;
+    register<bit<32>>(6) phase_angle_regs_h3;
+    register<bit<32>>(6) R1_h3;
 
-
+    bit<32> new_reg6_h3;
+    bit<32> new_reg5_h3;
+    bit<32> new_reg4_h3;
     bit<32> new_reg3_h3;
     bit<32> new_reg2_h3;
 
@@ -1087,32 +1127,68 @@ control MyIngress(inout headers hdr,
     bit<32> temp_mag_h3;
     bit<32> temp_ang_h3;
 
+    //h4
+
+    register<bit<32>>(6) frac_sec_regs_h4;
+    register<bit<32>>(6) soc_regs_h4;
+    register<bit<32>>(6) magnitude_regs_h4;
+    register<bit<32>>(6) phase_angle_regs_h4;
+    register<bit<32>>(6) R1_h4;
+
+    bit<32> new_reg6_h4;
+    bit<32> new_reg5_h4;
+    bit<32> new_reg4_h4;
+    bit<32> new_reg3_h4;
+    bit<32> new_reg2_h4;
+
+    bit<32> digest_counter_h4;
+
+    bit<32> temp_mag_h4;
+    bit<32> temp_ang_h4;
+
+
     action drop() {
         mark_to_drop(standard_metadata);
     }
 
     action update_registers() {
         //0 is top of stackssss
+        frac_sec_regs.read(new_reg5, (bit<32>)3);
+        frac_sec_regs.read(new_reg4, (bit<32>)2);
         frac_sec_regs.read(new_reg3, (bit<32>)1);
         frac_sec_regs.read(new_reg2, (bit<32>)0);
+        frac_sec_regs.write((bit<32>)4, new_reg5);
+        frac_sec_regs.write((bit<32>)3, new_reg4);
         frac_sec_regs.write((bit<32>)2, new_reg3);
         frac_sec_regs.write((bit<32>)1, new_reg2);
         frac_sec_regs.write((bit<32>)0, hdr.pmu.fracsec);
 
+        soc_regs.read(new_reg5, (bit<32>)3);
+        soc_regs.read(new_reg4, (bit<32>)2);
         soc_regs.read(new_reg3, (bit<32>)1);
         soc_regs.read(new_reg2, (bit<32>)0);
+        soc_regs.write((bit<32>)4, new_reg5);
+        soc_regs.write((bit<32>)3, new_reg4);
         soc_regs.write((bit<32>)2, new_reg3);
         soc_regs.write((bit<32>)1, new_reg2);
         soc_regs.write((bit<32>)0, hdr.pmu.soc);
 
+        magnitude_regs.read(new_reg5, (bit<32>)3);
+        magnitude_regs.read(new_reg4, (bit<32>)2);
         magnitude_regs.read(new_reg3, (bit<32>)1);
         magnitude_regs.read(new_reg2, (bit<32>)0);
+        magnitude_regs.write((bit<32>)4, new_reg5);
+        magnitude_regs.write((bit<32>)3, new_reg4);
         magnitude_regs.write((bit<32>)2, new_reg3);
         magnitude_regs.write((bit<32>)1, new_reg2);
         magnitude_regs.write((bit<32>)0, (bit<32>)(hdr.pmu.phasors >> 32));
 
+        phase_angle_regs.read(new_reg5, (bit<32>)3);
+        phase_angle_regs.read(new_reg4, (bit<32>)2);
         phase_angle_regs.read(new_reg3, (bit<32>)1);
         phase_angle_regs.read(new_reg2, (bit<32>)0);
+        phase_angle_regs.write((bit<32>)4, new_reg5);
+        phase_angle_regs.write((bit<32>)3, new_reg4);
         phase_angle_regs.write((bit<32>)2, new_reg3);
         phase_angle_regs.write((bit<32>)1, new_reg2);
         phase_angle_regs.write((bit<32>)0, (bit<32>)hdr.pmu.phasors);
@@ -1120,30 +1196,106 @@ control MyIngress(inout headers hdr,
 
     action update_registers_h3() {
         //0 is top of stackssss
+        frac_sec_regs_h3.read(new_reg6_h3, (bit<32>)4);
+        frac_sec_regs_h3.read(new_reg5_h3, (bit<32>)3);
+        frac_sec_regs_h3.read(new_reg4_h3, (bit<32>)2);
         frac_sec_regs_h3.read(new_reg3_h3, (bit<32>)1);
         frac_sec_regs_h3.read(new_reg2_h3, (bit<32>)0);
+        frac_sec_regs_h3.write((bit<32>)5, new_reg6_h3);
+        frac_sec_regs_h3.write((bit<32>)4, new_reg5_h3);
+        frac_sec_regs_h3.write((bit<32>)3, new_reg4_h3);
         frac_sec_regs_h3.write((bit<32>)2, new_reg3_h3);
         frac_sec_regs_h3.write((bit<32>)1, new_reg2_h3);
         frac_sec_regs_h3.write((bit<32>)0, hdr.pmu.fracsec);
 
+        soc_regs_h3.read(new_reg6_h3, (bit<32>)4);
+        soc_regs_h3.read(new_reg5_h3, (bit<32>)3);
+        soc_regs_h3.read(new_reg4_h3, (bit<32>)2);
         soc_regs_h3.read(new_reg3_h3, (bit<32>)1);
         soc_regs_h3.read(new_reg2_h3, (bit<32>)0);
+        soc_regs_h3.write((bit<32>)5, new_reg6_h3);
+        soc_regs_h3.write((bit<32>)4, new_reg5_h3);
+        soc_regs_h3.write((bit<32>)3, new_reg4_h3);
         soc_regs_h3.write((bit<32>)2, new_reg3_h3);
         soc_regs_h3.write((bit<32>)1, new_reg2_h3);
         soc_regs_h3.write((bit<32>)0, hdr.pmu.soc);
 
+        magnitude_regs_h3.read(new_reg6_h3, (bit<32>)4);
+        magnitude_regs_h3.read(new_reg5_h3, (bit<32>)3);
+        magnitude_regs_h3.read(new_reg4_h3, (bit<32>)2);
         magnitude_regs_h3.read(new_reg3_h3, (bit<32>)1);
         magnitude_regs_h3.read(new_reg2_h3, (bit<32>)0);
+        magnitude_regs_h3.write((bit<32>)5, new_reg6_h3);
+        magnitude_regs_h3.write((bit<32>)4, new_reg5_h3);
+        magnitude_regs_h3.write((bit<32>)3, new_reg4_h3);
         magnitude_regs_h3.write((bit<32>)2, new_reg3_h3);
         magnitude_regs_h3.write((bit<32>)1, new_reg2_h3);
         magnitude_regs_h3.write((bit<32>)0, (bit<32>)(hdr.pmu.phasors >> 32));
 
+        phase_angle_regs_h3.read(new_reg6_h3, (bit<32>)4);
+        phase_angle_regs_h3.read(new_reg5_h3, (bit<32>)3);
+        phase_angle_regs_h3.read(new_reg4_h3, (bit<32>)2);
         phase_angle_regs_h3.read(new_reg3_h3, (bit<32>)1);
         phase_angle_regs_h3.read(new_reg2_h3, (bit<32>)0);
+        phase_angle_regs_h3.write((bit<32>)5, new_reg6_h3);
+        phase_angle_regs_h3.write((bit<32>)4, new_reg5_h3);
+        phase_angle_regs_h3.write((bit<32>)3, new_reg4_h3);
         phase_angle_regs_h3.write((bit<32>)2, new_reg3_h3);
         phase_angle_regs_h3.write((bit<32>)1, new_reg2_h3);
         phase_angle_regs_h3.write((bit<32>)0, (bit<32>)hdr.pmu.phasors);
     }
+
+    action update_registers_h4() {
+        // 0 is top of stackssss
+        frac_sec_regs_h4.read(new_reg6_h4, (bit<32>)4);
+        frac_sec_regs_h4.read(new_reg5_h4, (bit<32>)3);
+        frac_sec_regs_h4.read(new_reg4_h4, (bit<32>)2);
+        frac_sec_regs_h4.read(new_reg3_h4, (bit<32>)1);
+        frac_sec_regs_h4.read(new_reg2_h4, (bit<32>)0);
+        frac_sec_regs_h4.write((bit<32>)5, new_reg6_h4);
+        frac_sec_regs_h4.write((bit<32>)4, new_reg5_h4);
+        frac_sec_regs_h4.write((bit<32>)3, new_reg4_h4);
+        frac_sec_regs_h4.write((bit<32>)2, new_reg3_h4);
+        frac_sec_regs_h4.write((bit<32>)1, new_reg2_h4);
+        frac_sec_regs_h4.write((bit<32>)0, hdr.pmu.fracsec);
+
+        soc_regs_h4.read(new_reg6_h4, (bit<32>)4);
+        soc_regs_h4.read(new_reg5_h4, (bit<32>)3);
+        soc_regs_h4.read(new_reg4_h4, (bit<32>)2);
+        soc_regs_h4.read(new_reg3_h4, (bit<32>)1);
+        soc_regs_h4.read(new_reg2_h4, (bit<32>)0);
+        soc_regs_h4.write((bit<32>)5, new_reg6_h4);
+        soc_regs_h4.write((bit<32>)4, new_reg5_h4);
+        soc_regs_h4.write((bit<32>)3, new_reg4_h4);
+        soc_regs_h4.write((bit<32>)2, new_reg3_h4);
+        soc_regs_h4.write((bit<32>)1, new_reg2_h4);
+        soc_regs_h4.write((bit<32>)0, hdr.pmu.soc);
+
+        magnitude_regs_h4.read(new_reg6_h4, (bit<32>)4);
+        magnitude_regs_h4.read(new_reg5_h4, (bit<32>)3);
+        magnitude_regs_h4.read(new_reg4_h4, (bit<32>)2);
+        magnitude_regs_h4.read(new_reg3_h4, (bit<32>)1);
+        magnitude_regs_h4.read(new_reg2_h4, (bit<32>)0);
+        magnitude_regs_h4.write((bit<32>)5, new_reg6_h4);
+        magnitude_regs_h4.write((bit<32>)4, new_reg5_h4);
+        magnitude_regs_h4.write((bit<32>)3, new_reg4_h4);
+        magnitude_regs_h4.write((bit<32>)2, new_reg3_h4);
+        magnitude_regs_h4.write((bit<32>)1, new_reg2_h4);
+        magnitude_regs_h4.write((bit<32>)0, (bit<32>)(hdr.pmu.phasors >> 32));
+
+        phase_angle_regs_h4.read(new_reg6_h4, (bit<32>)4);
+        phase_angle_regs_h4.read(new_reg5_h4, (bit<32>)3);
+        phase_angle_regs_h4.read(new_reg4_h4, (bit<32>)2);
+        phase_angle_regs_h4.read(new_reg3_h4, (bit<32>)1);
+        phase_angle_regs_h4.read(new_reg2_h4, (bit<32>)0);
+        phase_angle_regs_h4.write((bit<32>)5, new_reg6_h4);
+        phase_angle_regs_h4.write((bit<32>)4, new_reg5_h4);
+        phase_angle_regs_h4.write((bit<32>)3, new_reg4_h4);
+        phase_angle_regs_h4.write((bit<32>)2, new_reg3_h4);
+        phase_angle_regs_h4.write((bit<32>)1, new_reg2_h4);
+        phase_angle_regs_h4.write((bit<32>)0, (bit<32>)hdr.pmu.phasors);
+    }
+
 
     action send_pmu_to_control_plane() {
         // 0 is top of stack and most recent packets
@@ -1167,6 +1319,19 @@ control MyIngress(inout headers hdr,
         soc_regs.read(meta.jpt_packet.soc2, (bit<32>)2);
         frac_sec_regs.read(meta.jpt_packet.fracsec2, (bit<32>)2);
 
+        magnitude_regs.read(temp_mag, (bit<32>)3);
+        phase_angle_regs.read(temp_ang, (bit<32>)3);
+        meta.jpt_packet.phasors3 = temp_mag ++ temp_ang;
+        //meta.jpt_packet.sync0 = hdr.pmu.sync;
+        soc_regs.read(meta.jpt_packet.soc3, (bit<32>)3);
+        frac_sec_regs.read(meta.jpt_packet.fracsec0, (bit<32>)3);
+
+        magnitude_regs.read(temp_mag, (bit<32>)4);
+        phase_angle_regs.read(temp_ang, (bit<32>)4);
+        meta.jpt_packet.phasors4 = temp_mag ++ temp_ang;
+        soc_regs.read(meta.jpt_packet.soc4, (bit<32>)4);
+        frac_sec_regs.read(meta.jpt_packet.fracsec1, (bit<32>)4);
+
 
 
         meta.jpt_packet.curr_soc = hdr.pmu.soc;
@@ -1176,25 +1341,80 @@ control MyIngress(inout headers hdr,
         phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)0);
         meta.jpt_packet.phasors0_h3 = temp_mag_h3 ++ temp_ang_h3;
         //meta.jpt_packet.sync0 = hdr.pmu.sync;
-        soc_regs_h3.read(meta.jpt_packet.soc0, (bit<32>)0);
-        frac_sec_regs_h3.read(meta.jpt_packet.fracsec0, (bit<32>)0);
+        soc_regs_h3.read(meta.jpt_packet.soc0_h3, (bit<32>)0);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec0_h3, (bit<32>)0);
 
         magnitude_regs_h3.read(temp_mag_h3, (bit<32>)1);
         phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)1);
         meta.jpt_packet.phasors1_h3 = temp_mag_h3 ++ temp_ang_h3;
-        soc_regs_h3.read(meta.jpt_packet.soc1, (bit<32>)1);
-        frac_sec_regs_h3.read(meta.jpt_packet.fracsec1, (bit<32>)1);
+        soc_regs_h3.read(meta.jpt_packet.soc1_h3, (bit<32>)1);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec1_h3, (bit<32>)1);
 
         magnitude_regs_h3.read(temp_mag_h3, (bit<32>)2);
         phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)2);
         meta.jpt_packet.phasors2_h3 = temp_mag_h3 ++ temp_ang_h3;
-        soc_regs_h3.read(meta.jpt_packet.soc2, (bit<32>)2);
-        frac_sec_regs_h3.read(meta.jpt_packet.fracsec2, (bit<32>)2);
+        soc_regs_h3.read(meta.jpt_packet.soc2_h3, (bit<32>)2);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec2_h3, (bit<32>)2);
 
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)3);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)3);
+        meta.jpt_packet.phasors3_h3 = temp_mag_h3 ++ temp_ang_h3;
+        soc_regs_h3.read(meta.jpt_packet.soc3_h3, (bit<32>)3);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec3_h3, (bit<32>)3);
 
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)4);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)4);
+        meta.jpt_packet.phasors4_h3 = temp_mag_h3 ++ temp_ang_h3;
+        soc_regs_h3.read(meta.jpt_packet.soc4_h3, (bit<32>)4);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec4_h3, (bit<32>)4);
+
+        magnitude_regs_h3.read(temp_mag_h3, (bit<32>)5);
+        phase_angle_regs_h3.read(temp_ang_h3, (bit<32>)5);
+        meta.jpt_packet.phasors5_h3 = temp_mag_h3 ++ temp_ang_h3;
+        soc_regs_h3.read(meta.jpt_packet.soc5_h3, (bit<32>)5);
+        frac_sec_regs_h3.read(meta.jpt_packet.fracsec5_h3, (bit<32>)5);
 
         meta.jpt_packet.curr_soc = hdr.pmu.soc;
         meta.jpt_packet.curr_fracsec = hdr.pmu.fracsec;
+
+        //h4
+        magnitude_regs_h4.read(temp_mag_h4, (bit<32>)0);
+        phase_angle_regs_h4.read(temp_ang_h4, (bit<32>)0);
+        meta.jpt_packet.phasors0_h4 = temp_mag_h4 ++ temp_ang_h4;
+        //meta.jpt_packet.sync0 = hdr.pmu.sync;
+        soc_regs_h4.read(meta.jpt_packet.soc0_h4, (bit<32>)0);
+        frac_sec_regs_h4.read(meta.jpt_packet.fracsec0_h4, (bit<32>)0);
+
+        magnitude_regs_h4.read(temp_mag_h4, (bit<32>)1);
+        phase_angle_regs_h4.read(temp_ang_h4, (bit<32>)1);
+        meta.jpt_packet.phasors1_h4 = temp_mag_h4 ++ temp_ang_h4;
+        soc_regs_h4.read(meta.jpt_packet.soc1_h4, (bit<32>)1);
+        frac_sec_regs_h4.read(meta.jpt_packet.fracsec1_h4, (bit<32>)1);
+
+        magnitude_regs_h4.read(temp_mag_h4, (bit<32>)2);
+        phase_angle_regs_h4.read(temp_ang_h4, (bit<32>)2);
+        meta.jpt_packet.phasors2_h4 = temp_mag_h4 ++ temp_ang_h4;
+        soc_regs_h4.read(meta.jpt_packet.soc2_h4, (bit<32>)2);
+        frac_sec_regs_h4.read(meta.jpt_packet.fracsec2_h4, (bit<32>)2);
+
+        magnitude_regs_h4.read(temp_mag_h4, (bit<32>)3);
+        phase_angle_regs_h4.read(temp_ang_h4, (bit<32>)3);
+        meta.jpt_packet.phasors3_h4 = temp_mag_h4 ++ temp_ang_h4;
+        soc_regs_h4.read(meta.jpt_packet.soc3_h4, (bit<32>)3);
+        frac_sec_regs_h4.read(meta.jpt_packet.fracsec3_h4, (bit<32>)3);
+
+        magnitude_regs_h4.read(temp_mag_h4, (bit<32>)4);
+        phase_angle_regs_h4.read(temp_ang_h4, (bit<32>)4);
+        meta.jpt_packet.phasors4_h4 = temp_mag_h4 ++ temp_ang_h4;
+        soc_regs_h4.read(meta.jpt_packet.soc4_h4, (bit<32>)4);
+        frac_sec_regs_h4.read(meta.jpt_packet.fracsec4_h4, (bit<32>)4);
+
+        magnitude_regs_h4.read(temp_mag_h4, (bit<32>)5);
+        phase_angle_regs_h4.read(temp_ang_h4, (bit<32>)5);
+        meta.jpt_packet.phasors5_h4 = temp_mag_h4 ++ temp_ang_h4;
+        soc_regs_h4.read(meta.jpt_packet.soc5_h4, (bit<32>)5);
+        frac_sec_regs_h4.read(meta.jpt_packet.fracsec5_h4, (bit<32>)5);
+
 
 
 
@@ -1323,6 +1543,38 @@ control MyIngress(inout headers hdr,
                 hdr.pmu.chk = (bit<16>)standard_metadata.ingress_global_timestamp;
                 */
               }
+            }
+            else if(hdr.ipv4.srcAddr == 0x0a000404){ //h4
+                if(hdr.pmu.stat == (bit<16>)0x0)
+                {
+                  R1_h4.read(digest_counter_h4, 0);
+                  digest_counter_h4 = digest_counter_h4 + 1;
+                  R1_h4.write(0, digest_counter_h4);
+                  soc_regs_h4.read(temp_soc, (bit<32>)0);
+                  frac_sec_regs_h4.read(temp_frac_sec, (bit<32>)0);
+
+                  bit<32> soc_diff_in_frac_sec = (hdr.pmu.soc - temp_soc) * 1000000;
+                  bit<32> frac_sec_diff = soc_diff_in_frac_sec - temp_frac_sec + hdr.pmu.fracsec;
+
+
+                  if(frac_sec_diff > 20000 && temp_soc != 0) //gives a bit of "breathing room" for measurements
+                  {
+                    //SPEED_TEST: attaching local timestamp of when packets sent to control plane
+                    /*hdr.pmu.analog = (bit<32>)standard_metadata.ingress_global_timestamp;*/
+                    /*send_pmu_to_control_plane();*/
+                  }
+
+
+                  update_registers_h4();
+                }
+                else
+                {
+                  //SPEED_TEST: attaching local timestamp of arrival from control plane
+                  /*
+                  hdr.pmu.digital = (bit<16>)(standard_metadata.ingress_global_timestamp >> 16);
+                  hdr.pmu.chk = (bit<16>)standard_metadata.ingress_global_timestamp;
+                  */
+                }
             }
 
 
