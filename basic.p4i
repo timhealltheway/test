@@ -1324,13 +1324,13 @@ control MyIngress(inout headers hdr,
         meta.jpt_packet.phasors3 = temp_mag ++ temp_ang;
         //meta.jpt_packet.sync0 = hdr.pmu.sync;
         soc_regs.read(meta.jpt_packet.soc3, (bit<32>)3);
-        frac_sec_regs.read(meta.jpt_packet.fracsec0, (bit<32>)3);
+        frac_sec_regs.read(meta.jpt_packet.fracsec3, (bit<32>)3);
 
         magnitude_regs.read(temp_mag, (bit<32>)4);
         phase_angle_regs.read(temp_ang, (bit<32>)4);
         meta.jpt_packet.phasors4 = temp_mag ++ temp_ang;
         soc_regs.read(meta.jpt_packet.soc4, (bit<32>)4);
-        frac_sec_regs.read(meta.jpt_packet.fracsec1, (bit<32>)4);
+        frac_sec_regs.read(meta.jpt_packet.fracsec4, (bit<32>)4);
 
 
 

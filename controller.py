@@ -81,11 +81,11 @@ def generate_new_packets(interface, num_packets, initial_jpt_inputs, last_stored
             new_soc = new_soc + 1
 
         #make sure not generating too many
-        #print(str((curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac)))
-        if (curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac) > 16000:
+        print("here", str(abs(curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac)))
+        if abs((curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac)) > 16000:
             pmu_recovery_data_buffer.insert({"timestamp": new_soc + new_frac / 1000000, "magnitude": generated_mag, "phase_angle": generated_pa})
             generate_new_packet("s1-eth2", new_soc, new_frac, generated_mag, generated_pa)
-            #time.sleep(.017)
+            # time.sleep(.017)
 
 
         last_stored_soc = new_soc
@@ -94,21 +94,28 @@ def generate_new_packets(interface, num_packets, initial_jpt_inputs, last_stored
 
 def generate_new_packets_matrix(interface, num_packets, initial_jpt_inputs, last_stored_soc, last_stored_fracsec, curr_soc, curr_fracsec,mag,pa):
     # jpt_inputs = initial_jpt_inputs[0:]
+    # print("jpt here", num_packets)
+    number_packets = 1
     for i in range(num_packets):
+        # print("start2")
         new_soc = last_stored_soc
         new_frac = last_stored_fracsec + 16666
         generated_mag = mag
         generated_pa = pa
+        # complex_voltage_estimate = jpt_algo(jpt_inputs[0], jpt_inputs[1], jpt_inputs[2])
+        # generated_mag, generated_pa = phase_angle_and_magnitude_from_complex_voltage(complex_voltage_estimate)
         if (new_frac) / 1000000 >= 1:
             new_frac = (new_frac) % 1000000
             new_soc = new_soc + 1
 
         #make sure not generating too many
         #print(str((curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac)))
-        if (curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac) > 16000:
+        print("check here",(curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac))
+        if (abs((curr_soc * 1000000 + curr_fracsec) - (new_soc * 1000000 + new_frac))) > 16000:
             pmu_recovery_data_buffer.insert({"timestamp": new_soc + new_frac / 1000000, "magnitude": generated_mag, "phase_angle": generated_pa})
             generate_new_packet("s1-eth2", new_soc, new_frac, generated_mag, generated_pa)
-            #time.sleep(.017)
+            print("message sent",generated_mag,generated_pa)
+            # time.sleep(.017)
 
 
         last_stored_soc = new_soc
@@ -231,7 +238,7 @@ def on_digest_recv(msg):
     #pmu_packet = pmu_packet_parser(msg)
     #offset = 36
     controller_phasor_info_packet_length = 16
-    controller_phasor_info_packet_count = 17
+    controller_phasor_info_packet_count = 17 #17
 
     # the extra 8 here is for the most current timestamp
     offset = controller_phasor_info_packet_length * controller_phasor_info_packet_count + 8
@@ -277,20 +284,22 @@ def on_digest_recv(msg):
 
         pred_mag = fillIn(matrix_mag)
         pred_ang = fillIn(matrix_angle)
-        print("pred mag:", pred_mag, " | ", "pred angle: ", pred_ang)
+        # print("pred mag:", pred_mag, " | ", "pred angle: ", pred_ang)
 
         #put measurements in correct order for current recovery functions
         jpt_inputs.reverse()
 
         missing_packets = calc_missing_packet_count(curr_soc, curr_fracsec, last_stored_soc, last_stored_fracsec)
-        missing_packets = 0  # testing
+        # missing_packets = 1  # testing
+        c =1
 
         missing_packet_counter += missing_packets
         print("NUM MISSING TOTAL: " + str(missing_packet_counter))
 
 
-
-        if len(jpt_inputs) > 2:
+        # print(len(jpt_inputs))
+        if c == 1:
+            print("start")
             generate_new_packets_matrix("s1-eth2", missing_packets, jpt_inputs, last_stored_soc, last_stored_fracsec, curr_soc, curr_fracsec,pred_mag,pred_ang)
 
         #move to next digest packet

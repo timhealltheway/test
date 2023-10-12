@@ -44,13 +44,14 @@ class KeySortedList:
         csv_obj = [headers]
         for i in range(len(self._list)):
             pmu = self._list[i]
-            csv_obj.append(
-                [
-                 i,
-                 pmu["phasors"][0]["magnitude"],
-                 pmu["phasors"][0]["angle"],
-                 pmu["stat"] == 9,
-                 pmu["received_at"]])
+            if(pmu["stat"] == 9):
+                csv_obj.append(
+                    [
+                     i,
+                     pmu["phasors"][0]["magnitude"],
+                     pmu["phasors"][0]["angle"],
+                     pmu["stat"] == 9,
+                     pmu["received_at"]])
         with open(filename, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerows(csv_obj)

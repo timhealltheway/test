@@ -4290,6 +4290,29 @@
           "parameters" : [
             {
               "type" : "field",
+              "value" : ["scalars", "metadata._jpt_packet_fracsec01"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.frac_sec_regs"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "basic.p4",
+            "line" : 425,
+            "column" : 8,
+            "source_fragment" : "frac_sec_regs.read(meta.jpt_packet.fracsec0, (bit<32>)0)"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
               "value" : ["scalars", "temp_mag_0"]
             },
             {
@@ -4434,6 +4457,29 @@
             "line" : 430,
             "column" : 8,
             "source_fragment" : "soc_regs.read(meta.jpt_packet.soc1, (bit<32>)1)"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "metadata._jpt_packet_fracsec14"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.frac_sec_regs"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000001"
+            }
+          ],
+          "source_info" : {
+            "filename" : "basic.p4",
+            "line" : 431,
+            "column" : 8,
+            "source_fragment" : "frac_sec_regs.read(meta.jpt_packet.fracsec1, (bit<32>)1)"
           }
         },
         {
@@ -4766,7 +4812,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "metadata._jpt_packet_fracsec01"]
+              "value" : ["scalars", "metadata._jpt_packet_fracsec310"]
             },
             {
               "type" : "register_array",
@@ -4781,7 +4827,7 @@
             "filename" : "basic.p4",
             "line" : 444,
             "column" : 8,
-            "source_fragment" : "frac_sec_regs.read(meta.jpt_packet.fracsec0, (bit<32>)3)"
+            "source_fragment" : "frac_sec_regs.read(meta.jpt_packet.fracsec3, (bit<32>)3)"
           }
         },
         {
@@ -4940,7 +4986,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "metadata._jpt_packet_fracsec14"]
+              "value" : ["scalars", "metadata._jpt_packet_fracsec413"]
             },
             {
               "type" : "register_array",
@@ -4955,7 +5001,7 @@
             "filename" : "basic.p4",
             "line" : 450,
             "column" : 8,
-            "source_fragment" : "frac_sec_regs.read(meta.jpt_packet.fracsec1, (bit<32>)4)"
+            "source_fragment" : "frac_sec_regs.read(meta.jpt_packet.fracsec4, (bit<32>)4)"
           }
         },
         {

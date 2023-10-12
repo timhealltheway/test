@@ -91,7 +91,9 @@ def calculate_angle_statistics(exact_measurements, approximate_measurements, gen
             if angle > 50:
                 print("issue with: ")
     else:
-        for i in range(len(approximate_measurements)):
+        min_length = min(len(exact_measurements), len(approximate_measurements))
+
+        for i in range(min_length):
             ex = np.array([exact_measurements[i].real, exact_measurements[i].imag])
             app = np.array([approximate_measurements[i].real, approximate_measurements[i].imag])
             dot_product = np.dot(ex, app)
