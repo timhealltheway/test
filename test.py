@@ -76,7 +76,7 @@ def parse_results(result_file_path):
     magnitude_resValues = {}
     angle_resValues = {}
 
-    for percentage in range(1, 11):
+    for percentage in range(4, 5):
         percentage_str = str(percentage) + "pct_result"
         magnitude_resValues[f"mag{percentage}pct"] = []
         angle_resValues[f"ang{percentage}pct"] = []
@@ -145,6 +145,17 @@ def calculate_angle_difference(original_angle,pred_angle):
     print(avg_diff)
     return avg_diff, stdev(diffs),max(diffs)
 
+def write_array_to_file(arr, filename):
+    try:
+        # Open the file for writing
+        with open(filename, 'w') as file:
+            # Iterate through the array and write each element followed by a newline
+            for element in arr:
+                file.write(str(element) + '\n')
+        print(f"Array values written to {filename} successfully.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
 
 
 if __name__ == "__main__":
@@ -192,6 +203,7 @@ if __name__ == "__main__":
 
     #obtain origin value
     process_csv_data(csv_file, data_array, orig_mag_values, orig_ang_values)
+    write_array_to_file(orig_mag_values[5], "output.txt")
     # print((mag_values[1]))
 
     #obtain pred value
