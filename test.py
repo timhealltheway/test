@@ -77,7 +77,7 @@ def parse_results(result_file_path):
     angle_resValues = {}
 
     for percentage in range(1, 11):
-        percentage_str = str(percentage) + "pct"
+        percentage_str = str(percentage) + "pct_result"
         magnitude_resValues[f"mag{percentage}pct"] = []
         angle_resValues[f"ang{percentage}pct"] = []
 
@@ -85,6 +85,7 @@ def parse_results(result_file_path):
             if filename.endswith('.txt') and percentage_str in filename:
                 file_path = os.path.join(result_file_path, filename)
 
+                # print(file_path)
                 with open(file_path, 'r') as file:
                     # Skip header
                     next(file)
@@ -125,7 +126,7 @@ def calculate_angle_difference(original_angle,pred_angle):
         for j in range (i+1):
             pred_value = pred_angle[j]
             diff1 = abs(original_angle[i] - pred_value)
-            if diff1 > 2.5:
+            if diff1 > 1.8:
                 continue
             diffs.append(diff1)
 
@@ -142,83 +143,89 @@ def calculate_angle_difference(original_angle,pred_angle):
     total_diff = sum(diffs)
     avg_diff = total_diff / min_length
     print(avg_diff)
-    return avg_diff
+    return avg_diff, stdev(diffs),max(diffs)
 
 
 
+if __name__ == "__main__":
 
-# Directory where your JSON files are located
-json_directory = 'matrixevaluation/5k'
+    # Directory where your JSON files are located
+    json_directory = 'matrixevaluation/5k'
 
-# Define the range of percentages you have files for
-percentage_range = range(1, 11)
+    # Define the range of percentages you have files for
+    percentage_range = range(1, 11)
 
-# Call the function to load the data
-data_arrays = load_data_by_percentage(json_directory, percentage_range)
+    # Call the function to load the data
+    data_arrays = load_data_by_percentage(json_directory, percentage_range)
 
-# Access the data arrays as needed
-data_array_1pct = data_arrays[1]
-data_array_2pct = data_arrays[2]
-data_array_3pct = data_arrays[3]
-data_array_4pct = data_arrays[4]
-data_array_5pct = data_arrays[5]
-data_array_6pct = data_arrays[6]
-data_array_7pct = data_arrays[7]
-data_array_8pct = data_arrays[8]
-data_array_9pct = data_arrays[9]
-data_array_10pct = data_arrays[10]
-# print("index", data_array_1pct[0], "length",len(data_array_1pct[0]))
+    # Access the data arrays as needed
+    data_array_1pct = data_arrays[1]
+    data_array_2pct = data_arrays[2]
+    data_array_3pct = data_arrays[3]
+    data_array_4pct = data_arrays[4]
+    data_array_5pct = data_arrays[5]
+    data_array_6pct = data_arrays[6]
+    data_array_7pct = data_arrays[7]
+    data_array_8pct = data_arrays[8]
+    data_array_9pct = data_arrays[9]
+    data_array_10pct = data_arrays[10]
+    # print("index", data_array_1pct[0], "length",len(data_array_1pct[0]))
 
-# Usage example:
-csv_file = "pmu2_5k.csv"
+    # Usage example:
+    csv_file = "pmu2_5k.csv"
 
-data_array = {
-    1: data_array_1pct[0],
-    2: data_array_2pct[0],
-    3: data_array_3pct[0],
-    4: data_array_4pct[0],
-    5: data_array_5pct[0],
-    6: data_array_6pct[0],
-    7: data_array_7pct[0],
-    8: data_array_8pct[0],
-    9: data_array_9pct[0],
-    10: data_array_10pct[0],
-}
+    data_array = {
+        1: data_array_1pct[0],
+        2: data_array_2pct[0],
+        3: data_array_3pct[0],
+        4: data_array_4pct[0],
+        5: data_array_5pct[0],
+        6: data_array_6pct[0],
+        7: data_array_7pct[0],
+        8: data_array_8pct[0],
+        9: data_array_9pct[0],
+        10: data_array_10pct[0],
+    }
 
-mag_values = {pct: [] for pct in range(1, 11)}
-ang_values = {pct: [] for pct in range(1, 11)}
+    orig_mag_values = {pct: [] for pct in range(1, 11)}
+    orig_ang_values = {pct: [] for pct in range(1, 11)}
 
-process_csv_data(csv_file, data_array, mag_values, ang_values)
-# print((mag_values[1]))
+    #obtain origin value
+    process_csv_data(csv_file, data_array, orig_mag_values, orig_ang_values)
+    # print((mag_values[1]))
 
-result_file_path = "matrixevaluation/5k"
-magnitude_values, angle_values = parse_results(result_file_path)
-# print(magnitude_values["mag1pct"], "length", len(magnitude_values["mag1pct"]))
+    #obtain pred value
+    result_file_path = "matrixevaluation/5k"
+    magnitude_values, angle_values = parse_results(result_file_path)
+    print(angle_values["ang1pct"])
+    # print(magnitude_values["mag1pct"], "length", len(magnitude_values["mag1pct"]))
 
-meanRes = []
-stands =[]
-for percentage in range(1, 11):
-    # Calculate the statistics for each percentage
-    m, std, c = calculate_approximation_error_statistics(mag_values[percentage], magnitude_values[f"mag{percentage}pct"])
-    meanRes.append(m)
-    stands.append(std)
-    print(f"For {percentage}%: m = {m}, std = {std}, c = {c}")
-
-
-print("Averge error:", meanRes)
-
-error_x = [x for x in range(1,11)]
-print("Standard dev:", stands)
-plot_graph(error_x, meanRes, stands,x_label="Missing Data Rate, %", y_label="Magnitude MAPE, %", title="Magnitude Mean absolute percentage Error vs Missing Data Rate")
+    #evaluation
+    meanRes = []
+    stands =[]
+    for percentage in range(1, 11):
+        # Calculate the statistics for each percentage
+        m, std, c = calculate_approximation_error_statistics(orig_mag_values[percentage], magnitude_values[f"mag{percentage}pct"])
+        meanRes.append(m)
+        stands.append(std)
+        print(f"For {percentage}%: m = {m}, std = {std}, c = {c}")
 
 
-angRes= []
-for percentage in range(1,11):
-    # Calculate the statistics for each percentage
-    m = calculate_angle_difference(ang_values[percentage], angle_values[f"ang{percentage}pct"])
-    # average_ang_error, std_dev_ang, max_error_ang = calculate_angle_statistics(exact_measurements=ang_values[percentage], approximate_measurements=angle_values[f"ang{percentage}pct"])
+    print("Averge error:", meanRes)
 
-    angRes.append(m)
+    error_x = [x for x in range(1,11)]
+    print("Standard dev:", stands)
+    # plot_graph(error_x, meanRes, stands,x_label="Missing Data Rate, %", y_label="Magnitude MAPE, %", title="Magnitude Mean absolute percentage Error vs Missing Data Rate")
 
-print("angle difference:", angRes)
-# plot_graph(error_x, angRes, x_label="Missing Data Rate, %", y_label="Angle difference, degree", title="Phase Angle difference vs Missing Data Rate")
+
+    angRes= []
+    phase_stands =[]
+    for percentage in range(1,11):
+        # Calculate the statistics for each percentage
+        m,std,c = calculate_angle_difference(orig_ang_values[percentage], angle_values[f"ang{percentage}pct"])
+        # average_ang_error, std_dev_ang, max_error_ang = calculate_angle_statistics(exact_measurements=ang_values[percentage], approximate_measurements=angle_values[f"ang{percentage}pct"])
+        phase_stands.append(std)
+        angRes.append(m)
+
+    print("angle difference:", angRes)
+    plot_graph(error_x, angRes,phase_stands, x_label="Missing Data Rate, %", y_label="Angle difference, degree", title="Phase Angle difference vs Missing Data Rate")

@@ -1,5 +1,5 @@
 # Define the path to your input text file and output text file
-input_file_path = 'matrixevaluation/5k/1pct_result1.txt'
+input_file_path = 'matrixevaluation/5k/1pct_result.txt'
 output_file_path = 'matrixevaluation/5k/1pct_result2.txt'
 
 header = 1
