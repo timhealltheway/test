@@ -7,7 +7,7 @@ import numpy as np
 from jpt_algo_evaluation.jpt_algo import calculate_complex_voltage, calculate_angle_statistics, calculate_approximation_error_statistics
 
 
-def plot_graph(array1, array2, array3, x_label="X-axis", y_label="Y-axis", title="Graph Title"):
+def plot_graph(array1, array2, array3, x_label="X-axis", y_label="Y-axis", title="Graph Title", file_name="plot.pdf"):
     """
     Plot a graph with two arrays.
 
@@ -21,12 +21,15 @@ def plot_graph(array1, array2, array3, x_label="X-axis", y_label="Y-axis", title
     Returns:
         None
     """
+    scale_factor = 10
+    scaled_array3 = [std / scale_factor for std in array3]
+
     plt.figure(figsize=(8, 6))  # Set the figure size (optional)
 
     # Plot the data
     plt.plot(array1, array2, marker='o', linestyle='-', color='b', label="Data")
 
-    plt.errorbar(array1, array2, yerr=array3, fmt='o', label="td Dev")
+    plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', label="td Dev")
 
     # Add labels and title
     plt.xlabel(x_label)
@@ -39,6 +42,10 @@ def plot_graph(array1, array2, array3, x_label="X-axis", y_label="Y-axis", title
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
     plt.show()
+
+    # Save the plot as a PDF
+    plt.savefig(file_name, format='pdf')
+    plt.close()  # Close the figure
 
 def load_data_by_percentage(directory, percentage_range):
     data_arrays = {}
@@ -76,7 +83,7 @@ def parse_results(result_file_path):
     magnitude_resValues = {}
     angle_resValues = {}
 
-    for percentage in range(4, 5):
+    for percentage in range(1, 11):
         percentage_str = str(percentage) + "pct_result"
         magnitude_resValues[f"mag{percentage}pct"] = []
         angle_resValues[f"ang{percentage}pct"] = []
@@ -102,7 +109,7 @@ def parse_results(result_file_path):
 def calculate_approximation_error(exact, approximate):
     x = abs(exact - approximate) / exact * 100
     # print("exact",exact,"approx",approximate,"abs error", x )
-    return abs(exact - approximate) / exact * 100
+    return abs(exact - approximate) / exact
 
 #calculate the average, std deviation, and range of approximation errors
 def calculate_approximation_error_statistics(exact_measurements, approximate_measurements, generated_indexes = None):
@@ -203,13 +210,13 @@ if __name__ == "__main__":
 
     #obtain origin value
     process_csv_data(csv_file, data_array, orig_mag_values, orig_ang_values)
-    write_array_to_file(orig_mag_values[5], "output.txt")
+    write_array_to_file(orig_ang_values[10], "output.txt")
     # print((mag_values[1]))
 
     #obtain pred value
     result_file_path = "matrixevaluation/5k"
     magnitude_values, angle_values = parse_results(result_file_path)
-    print(angle_values["ang1pct"])
+    # print(angle_values["ang1pct"])
     # print(magnitude_values["mag1pct"], "length", len(magnitude_values["mag1pct"]))
 
     #evaluation
@@ -227,7 +234,8 @@ if __name__ == "__main__":
 
     error_x = [x for x in range(1,11)]
     print("Standard dev:", stands)
-    # plot_graph(error_x, meanRes, stands,x_label="Missing Data Rate, %", y_label="Magnitude MAPE, %", title="Magnitude Mean absolute percentage Error vs Missing Data Rate")
+    plot_graph(error_x, meanRes, stands,x_label="Missing Data Rate, %", y_label="Magnitude MAPE", title="Magnitude Mean absolute percentage Error vs Missing Data Rate"
+    , file_name = "magVSrate.pdf")
 
 
     angRes= []
@@ -240,4 +248,5 @@ if __name__ == "__main__":
         angRes.append(m)
 
     print("angle difference:", angRes)
-    plot_graph(error_x, angRes,phase_stands, x_label="Missing Data Rate, %", y_label="Angle difference, degree", title="Phase Angle difference vs Missing Data Rate")
+    plot_graph(error_x, angRes,phase_stands, x_label="Missing Data Rate, %", y_label="Angle difference, degree", title="Phase Angle difference vs Missing Data Rate"
+    ,file_name = "anglevsRate.pdf")
