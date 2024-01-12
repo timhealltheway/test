@@ -7,7 +7,7 @@ import numpy as np
 from jpt_algo_evaluation.jpt_algo import calculate_complex_voltage, calculate_angle_statistics, calculate_approximation_error_statistics
 
 
-def plot_graph(array1, array2, array3, x_label="X-axis", y_label="Y-axis", title="Graph Title", file_name="plot.pdf"):
+def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y-axis", title="Graph Title", file_name="plot.pdf"):
     """
     Plot a graph with two arrays.
 
@@ -21,7 +21,7 @@ def plot_graph(array1, array2, array3, x_label="X-axis", y_label="Y-axis", title
     Returns:
         None
     """
-    scale_factor = 10
+    #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
     plt.figure(figsize=(8, 6))  # Set the figure size (optional)
@@ -41,7 +41,7 @@ def plot_graph(array1, array2, array3, x_label="X-axis", y_label="Y-axis", title
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
-    plt.show()
+    #plt.show()
 
     # Save the plot as a PDF
     plt.savefig(file_name, format='pdf')
@@ -234,7 +234,7 @@ if __name__ == "__main__":
 
     error_x = [x for x in range(1,11)]
     print("Standard dev:", stands)
-    plot_graph(error_x, meanRes, stands,x_label="Missing Data Rate, %", y_label="Magnitude MAPE", title="Magnitude Mean absolute percentage Error vs Missing Data Rate"
+    plot_graph(10,error_x, meanRes, stands,x_label="Missing Data Rate, %", y_label="Magnitude MAPE", title="Magnitude Mean absolute percentage Error vs Missing Data Rate"
     , file_name = "magVSrate.pdf")
 
 
@@ -248,5 +248,5 @@ if __name__ == "__main__":
         angRes.append(m)
 
     print("angle difference:", angRes)
-    plot_graph(error_x, angRes,phase_stands, x_label="Missing Data Rate, %", y_label="Angle difference, degree", title="Phase Angle difference vs Missing Data Rate"
+    plot_graph(5,error_x, angRes,phase_stands, x_label="Missing Data Rate, %", y_label="Angle difference, degree", title="Phase Angle difference vs Missing Data Rate"
     ,file_name = "anglevsRate.pdf")
