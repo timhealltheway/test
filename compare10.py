@@ -48,7 +48,7 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
 
 
 
-csv_file_path = "10per-mag.csv"  # Change the file extension to .tsv if it is indeed tab-separated
+csv_file_path = "10per-ang.csv"  # Change the file extension to .tsv if it is indeed tab-separated
 
 # Initialize empty lists to hold the column data
 magnitude = []
@@ -67,5 +67,7 @@ with open(csv_file_path, newline='') as csvfile:
 # magnitude and orig are now lists containing the data from each column
 print("length:", len(magnitude))
 print("length of origin leng:", len(orig))
-plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Number of packet missing",y_label = "Magnitude(Volts)",
-title = "",file_name= '10-mag.pdf')
+plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Number of packet missing",y_label = "Phase Angle(Degree)",
+title = "",file_name= '10-ang.pdf')
+
+#"Number of packet missing"   Magnitude(Volts)
