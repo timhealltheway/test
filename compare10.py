@@ -21,8 +21,8 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
     plt.figure(figsize=(8, 6))  # Set the figure size (optional)
 
     # Plot the data
-    plt.plot(array3, array1, 'o-',label="Array 1")
-    plt.plot(array3, array2, 'x-',label="Array 2")
+    plt.plot(array3, array1, 'o-',label="Recovered value")
+    plt.plot(array3, array2, 'x-',label="Original Data")
 
     # Add labels and title
     plt.xlabel(x_label)
@@ -40,7 +40,7 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
-    plt.show()
+    # plt.show()
 
     # Save the plot as a PDF
     plt.savefig(file_name, format='pdf')
@@ -67,4 +67,5 @@ with open(csv_file_path, newline='') as csvfile:
 # magnitude and orig are now lists containing the data from each column
 print("length:", len(magnitude))
 print("length of origin leng:", len(orig))
-plot_graph(magnitude,orig,np.arange(len(magnitude)),magnitude,file_name= '10-mag.pdf')
+plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Number of packet missing",y_label = "Magnitude(Volts)",
+title = "",file_name= '10-mag.pdf')
