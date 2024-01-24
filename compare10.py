@@ -31,8 +31,8 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
 
 
     # Add labels and title
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
+    plt.xlabel(x_label, fontsize=15)
+    plt.ylabel(y_label, fontsize=15)
     plt.title(title)
 
     # Add a legend (optional)
@@ -67,7 +67,10 @@ with open(csv_file_path, newline='') as csvfile:
 # magnitude and orig are now lists containing the data from each column
 print("length:", len(magnitude))
 print("length of origin leng:", len(orig))
-plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Number of packet missing",y_label = "Magnitude(Volts)",
-title = "",file_name= '10-ang.pdf')
+plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Magnitude (Volts)",
+title = "",file_name= '10-mag.pdf')
 
-#"Number of packet missing"   Magnitude(Volts) Phase Angle(Degree)
+#"Number of packet missing"   Magnitude(Volts) Phase Angle (Degrees)
+
+# plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Phase Angle (Degrees)",
+# title = "",file_name= '10-ang.pdf')

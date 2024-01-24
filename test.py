@@ -27,21 +27,21 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.figure(figsize=(8, 6))  # Set the figure size (optional)
 
     # Plot the data
-    plt.plot(array1, array2, marker='o', linestyle='-', color='b', label="Data")
+    plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
 
-    plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', label="td Dev")
+    plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD')
 
     # Add labels and title
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
-    plt.title(title)
+    plt.xlabel(x_label, fontsize=15)
+    plt.ylabel(y_label, fontsize=15)
+    plt.title("")
 
     # Add a legend (optional)
     plt.legend()
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
-    #plt.show()
+    # plt.show()
 
     # Save the plot as a PDF
     plt.savefig(file_name, format='pdf')
@@ -175,7 +175,7 @@ if __name__ == "__main__":
 
     # Call the function to load the data
     data_arrays = load_data_by_percentage(json_directory, percentage_range)
-
+    # print(data_arrays[1])
     # Access the data arrays as needed
     data_array_1pct = data_arrays[1]
     data_array_2pct = data_arrays[2]
@@ -234,8 +234,8 @@ if __name__ == "__main__":
 
     error_x = [x for x in range(1,11)]
     print("Standard dev:", stands)
-    plot_graph(10,error_x, meanRes, stands,x_label="Missing Data Rate, %", y_label="Magnitude MAPE", title="Magnitude Mean absolute percentage Error vs Missing Data Rate"
-    , file_name = "magVSrate.pdf")
+    # plot_graph(10,error_x, meanRes, stands,x_label="Missing Data Rate, %", y_label="Magnitude MAPE", title="Magnitude Mean absolute percentage Error vs Missing Data Rate"
+    # , file_name = "magVSrate.pdf")
 
 
     angRes= []
@@ -248,5 +248,5 @@ if __name__ == "__main__":
         angRes.append(m)
 
     print("angle difference:", angRes)
-    plot_graph(5,error_x, angRes,phase_stands, x_label="Missing Data Rate, %", y_label="Angle difference, degree", title="Phase Angle difference vs Missing Data Rate"
+    plot_graph(5,error_x, angRes,phase_stands, x_label="Missing Data Rate (%)", y_label="Angle difference (Degrees)", title="Phase Angle difference vs Missing Data Rate"
     ,file_name = "anglevsRate.pdf")
