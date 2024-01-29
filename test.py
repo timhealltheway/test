@@ -24,7 +24,7 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
-    plt.figure(figsize=(8, 6))  # Set the figure size (optional)
+    plt.figure(figsize=(10, 5))  # Set the figure size (optional)
 
     # Plot the data
     plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
@@ -32,12 +32,12 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD')
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=15)
-    plt.ylabel(y_label, fontsize=15)
+    plt.xlabel(x_label, fontsize=18,fontweight='bold')
+    plt.ylabel(y_label, fontsize=18,fontweight='bold')
     plt.title("")
 
     # Set the font size of the axis tick labels
-    plt.tick_params(axis='both', which='major', labelsize=10)  # Set the font size here
+    plt.tick_params(axis='both', which='major', labelsize=25)  # Set the font size here
 
 
     # Add a legend (optional)
@@ -45,6 +45,8 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
+    plt.tight_layout()
+
     # plt.show()
 
     # Save the plot as a PDF

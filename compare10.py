@@ -18,21 +18,27 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
         None
     """
 
-    plt.figure(figsize=(8, 6))  # Set the figure size (optional)
+    plt.figure(figsize=(10, 5))  # Set the figure size (optional)
 
     # Plot the data
     plt.plot(array3, array1, 'o-',label="Recovered value")
     plt.plot(array3, array2, 'x-',label="Original Data")
 
     # Add labels and title
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
+    plt.xlabel(x_label, fontsize=15,fontweight='bold')
+    plt.ylabel(y_label, fontsize=15,fontweight='bold')
     plt.title(title)
+
+    # Set the font size of the axis tick labels
+    plt.tick_params(axis='both', which='major', labelsize=20)  # Set the font size here
+
+    # Add a legend with increased font size
+    plt.legend(fontsize=500)  # You can specify a numeric value or 'small', 'medium', 'large', 'x-large', etc.
 
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=15)
-    plt.ylabel(y_label, fontsize=15)
+    plt.xlabel(x_label, fontsize=18,fontweight='bold')
+    plt.ylabel(y_label, fontsize=18,fontweight='bold')
     plt.title(title)
 
     # Add a legend (optional)
@@ -40,6 +46,7 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
+    plt.tight_layout()
     # plt.show()
 
     # Save the plot as a PDF
@@ -48,7 +55,7 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
 
 
 
-csv_file_path = "10per-mag.csv"  # Change the file extension to .tsv if it is indeed tab-separated
+csv_file_path = "10per-ang.csv"  # Change the file extension to .tsv if it is indeed tab-separated
 
 # Initialize empty lists to hold the column data
 magnitude = []
@@ -67,10 +74,10 @@ with open(csv_file_path, newline='') as csvfile:
 # magnitude and orig are now lists containing the data from each column
 print("length:", len(magnitude))
 print("length of origin leng:", len(orig))
-plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Magnitude (Volts)",
-title = "",file_name= '10-mag.pdf')
+# plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Magnitude (Volts)",
+# title = "",file_name= '10-mag.pdf')
 
 #"Number of packet missing"   Magnitude(Volts) Phase Angle (Degrees)
 
-# plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Phase Angle (Degrees)",
-# title = "",file_name= '10-ang.pdf')
+plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Phase Angle (Degrees)",
+title = "",file_name= '10-ang.pdf')
