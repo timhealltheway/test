@@ -25,7 +25,7 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
-    plt.figure(figsize=(12, 6))  # Set the figure size (optional)
+    plt.figure(figsize=(11, 7))  # Set the figure size (optional)
 
     plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
 
