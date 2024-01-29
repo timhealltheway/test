@@ -36,6 +36,10 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.ylabel(y_label, fontsize=15)
     plt.title("")
 
+    # Set the font size of the axis tick labels
+    plt.tick_params(axis='both', which='major', labelsize=10)  # Set the font size here
+
+
     # Add a legend (optional)
     plt.legend()
 

@@ -24,16 +24,19 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
-    plt.figure(figsize=(8, 6))  # Set the figure size (optional)
+    plt.figure(figsize=(8, 4))  # Set the figure size (optional)
 
     plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
 
     plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD')
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=15)
-    plt.ylabel(y_label, fontsize=15)
+    plt.xlabel(x_label, fontsize=12)
+    plt.ylabel(y_label, fontsize=12)
     plt.title("")
+
+    # Set the font size of the axis tick labels
+    plt.tick_params(axis='both', which='major', labelsize=12)  # Set the font size here
 
     # Add a legend (optional)
     plt.legend()
@@ -231,7 +234,7 @@ if __name__ == "__main__":
 
     error_x = [x for x in range(1,11)]
     print("Standard dev:", stands)
-    plot_graph(100,error_x, meanRes, stands,x_label="Missing Data Rate (%)", y_label="Magnitude MAPE (%)", title="Magnitude Mean absolute percentage Error vs Missing Data Rate"
+    plot_graph(100,error_x, meanRes, stands,x_label="Missing Data Rate (%)", y_label="Magnitude MAPE", title="Magnitude Mean absolute percentage Error vs Missing Data Rate"
     , file_name = "magVSrate.pdf")
 
 
