@@ -25,7 +25,7 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
-    plt.figure(figsize=(10, 5))  # Set the figure size (optional)
+    plt.figure(figsize=(12, 6))  # Set the figure size (optional)
 
     plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
 
@@ -48,10 +48,10 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
-    # plt.show()
+    plt.show()
 
     # Save the plot as a PDF
-    plt.savefig(file_name, format='pdf')
+    # plt.savefig(file_name, format='pdf')
     plt.close()  # Close the figure
 
 def load_data_by_percentage(directory, percentage_range):
