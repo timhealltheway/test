@@ -3,6 +3,7 @@ import json
 import csv
 from statistics import mean, stdev
 import matplotlib.pyplot as plt
+from matplotlib.ticker import ScalarFormatter
 import numpy as np
 from jpt_algo_evaluation.jpt_algo import calculate_complex_voltage, calculate_angle_statistics, calculate_approximation_error_statistics
 
@@ -24,7 +25,7 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
-    plt.figure(figsize=(8, 3))  # Set the figure size (optional)
+    plt.figure(figsize=(10, 5))  # Set the figure size (optional)
 
     plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
 
@@ -35,8 +36,12 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.ylabel(y_label, fontsize=14)
     plt.title("")
 
+    # Set y-axis to scientific notation
+    plt.gca().yaxis.set_major_formatter(ScalarFormatter(useMathText=True))
+    plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+
     # Set the font size of the axis tick labels
-    plt.tick_params(axis='both', which='major', labelsize=13)  # Set the font size here
+    plt.tick_params(axis='both', which='major', labelsize=12)  # Set the font size here
 
     # Add a legend (optional)
     plt.legend()
