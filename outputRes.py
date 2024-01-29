@@ -25,15 +25,15 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
-    plt.figure(figsize=(12, 6))  # Set the figure size (optional)
+    plt.figure(figsize=(10, 5))  # Set the figure size (optional)
 
     plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
 
     plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD')
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=18)
-    plt.ylabel(y_label, fontsize=18)
+    plt.xlabel(x_label, fontsize=18,fontweight='bold')
+    plt.ylabel(y_label, fontsize=18,fontweight='bold')
     plt.title("")
 
     # Set y-axis to scientific notation
@@ -41,7 +41,7 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
     # Set the font size of the axis tick labels
-    plt.tick_params(axis='both', which='major', labelsize=20)  # Set the font size here
+    plt.tick_params(axis='both', which='major', labelsize=25)  # Set the font size here
 
     # Add a legend (optional)
     plt.legend()
