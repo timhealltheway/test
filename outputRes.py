@@ -43,10 +43,10 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
-    plt.show()
+    # plt.show()
 
     # Save the plot as a PDF
-    # plt.savefig(file_name, format='pdf')
+    plt.savefig(file_name, format='pdf')
     plt.close()  # Close the figure
 
 def load_data_by_percentage(directory, percentage_range):
