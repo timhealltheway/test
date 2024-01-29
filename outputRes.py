@@ -32,8 +32,8 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD')
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=16)
-    plt.ylabel(y_label, fontsize=16)
+    plt.xlabel(x_label, fontsize=18)
+    plt.ylabel(y_label, fontsize=18)
     plt.title("")
 
     # Set y-axis to scientific notation
@@ -41,7 +41,7 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
     # Set the font size of the axis tick labels
-    plt.tick_params(axis='both', which='major', labelsize=14)  # Set the font size here
+    plt.tick_params(axis='both', which='major', labelsize=16)  # Set the font size here
 
     # Add a legend (optional)
     plt.legend()
