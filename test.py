@@ -5,7 +5,8 @@ from statistics import mean, stdev
 import matplotlib.pyplot as plt
 import numpy as np
 from jpt_algo_evaluation.jpt_algo import calculate_complex_voltage, calculate_angle_statistics, calculate_approximation_error_statistics
-
+from matplotlib.ticker import FuncFormatter
+import matplotlib as mpl
 
 def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y-axis", title="Graph Title", file_name="plot.pdf"):
     """
@@ -24,16 +25,21 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
+
+    # Set the font to Times New Roman for all elements
+    mpl.rcParams['font.family'] = 'Times New Roman'
     plt.figure(figsize=(10, 5))  # Set the figure size (optional)
 
-    # Plot the data
-    plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
+    plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD',linewidth =3)
 
-    plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD')
+    plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD', capsize=5)
+
+    # Setting the y-axis range
+    plt.ylim([0.2, 2])  # Sets the y-axis to range from 0 to 12
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=18,fontweight='bold')
-    plt.ylabel(y_label, fontsize=18,fontweight='bold')
+    plt.xlabel(x_label, fontsize=20)
+    plt.ylabel(y_label, fontsize=20)
     plt.title("")
 
     # Set the font size of the axis tick labels
@@ -41,7 +47,7 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
 
 
     # Add a legend (optional)
-    plt.legend()
+    # plt.legend()
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
@@ -253,6 +259,6 @@ if __name__ == "__main__":
         phase_stands.append(std)
         angRes.append(m)
 
-    print("angle difference:", angRes)
-    plot_graph(5,error_x, angRes,phase_stands, x_label="Missing Data Rate (%)", y_label="Angle difference (Degrees)", title="Phase Angle difference vs Missing Data Rate"
+    # print("angle ifference:", angRes)
+    plot_graph(5,error_x, angRes,phase_stands, x_label="Missing Data Rate (%)", y_label="Angle Difference (Degrees)", title="Phase Angle difference vs Missing Data Rate"
     ,file_name = "anglevsRate.pdf")

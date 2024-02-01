@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 import numpy as np
 from jpt_algo_evaluation.jpt_algo import calculate_complex_voltage, calculate_angle_statistics, calculate_approximation_error_statistics
+from matplotlib.ticker import FuncFormatter
+import matplotlib as mpl
 
 
 def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y-axis", title="Graph Title", file_name="plot.pdf"):
@@ -25,26 +27,38 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     #scale_factor = 10
     scaled_array3 = [std / scale_factor for std in array3]
 
-    plt.figure(figsize=(10, 5))  # Set the figure size (optional)
 
-    plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD')
+    # Set the font to Times New Roman for all elements
+    mpl.rcParams['font.family'] = 'Times New Roman'
+    plt.figure(figsize=(10, 4))  # Set the figure size (optional)
 
-    plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD')
+    plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD',linewidth =3)
+
+    plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD', capsize=5)
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=18,fontweight='bold')
-    plt.ylabel(y_label, fontsize=18,fontweight='bold')
+    plt.xlabel(x_label, fontsize=20)
+    plt.ylabel(y_label, fontsize=20)
     plt.title("")
 
     # Set y-axis to scientific notation
-    plt.gca().yaxis.set_major_formatter(ScalarFormatter(useMathText=True))
-    plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+    # plt.gca().yaxis.set_major_formatter(ScalarFormatter(useMathText=True))
+    # plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+    # Function to format the y-axis labels as percentages
+    # Function to format the y-axis labels as parts per thousand
+    def to_per_thousand(y, position):
+        return f"{y * 100.00:.3f}%"  # Multiply by 1000 and format as string with ‰ symbol
+
+    # Create the formatter and apply it to the y-axis
+    formatter = FuncFormatter(to_per_thousand)
+    plt.gca().yaxis.set_major_formatter(formatter)
+
 
     # Set the font size of the axis tick labels
     plt.tick_params(axis='both', which='major', labelsize=25)  # Set the font size here
 
     # Add a legend (optional)
-    plt.legend()
+    # plt.legend()
 
     # Display the plot
     plt.grid(True)  # Add grid lines (optional)
@@ -113,7 +127,7 @@ def parse_results(result_file_path):
     return magnitude_resValues, angle_resValues
 
 def calculate_approximation_error(exact, approximate):
-    x = abs(exact - approximate) / exact * 100
+    x = abs(exact - approximate) / exact
     # print("exact",exact,"approx",approximate,"abs error", x )
     return abs(exact - approximate) / exact
 
@@ -130,7 +144,7 @@ def calculate_approximation_error_statistics(exact_measurements, approximate_mea
 def calculate_angle_difference(original_angle,pred_angle):
     diffs =[]
     min_length = min(len(original_angle), len(pred_angle))
-    print("length",min_length)
+    # print("length",min_length)
 
     for i in range(min_length-1):
         next_pred = pred_angle[i+1]
@@ -151,11 +165,11 @@ def calculate_angle_difference(original_angle,pred_angle):
         #     diffs.append(diff1)
         #
         # diffs.append(diff2)
-        print("origin",original_angle[i], "pred:", pred_angle[i] ,"diff",diff1)
+        # print("origin",original_angle[i], "pred:", pred_angle[i] ,"diff",diff1)
 
     total_diff = sum(diffs)
     avg_diff = total_diff / min_length
-    print(avg_diff)
+    # print(avg_diff)
     return avg_diff, stdev(diffs),max(diffs)
 
 def write_array_to_file(arr, filename):
