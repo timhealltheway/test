@@ -30,8 +30,8 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
     # Setting the y-axis range
     # plt.ylim([-180, 180])  # Sets the y-axis to range from 0 to 12
     # Add labels and title
-    plt.xlabel(x_label, fontsize=20)
-    plt.ylabel(y_label, fontsize=20)
+    plt.xlabel(x_label, fontsize=25)
+    plt.ylabel(y_label, fontsize=25)
     plt.title(title)
 
     # Set the font size of the axis tick labels
@@ -51,7 +51,7 @@ def plot_graph(array1, array2,array3,x_label="X-axis", y_label="Y-axis", title="
 
 
 
-csv_file_path = "10per-mag.csv"  # Change the file extension to .tsv if it is indeed tab-separated
+csv_file_path = "10per-ang.csv"  # Change the file extension to .tsv if it is indeed tab-separated
 
 # Initialize empty lists to hold the column data
 magnitude = []
@@ -70,10 +70,10 @@ with open(csv_file_path, newline='') as csvfile:
 # magnitude and orig are now lists containing the data from each column
 # print("length:", len(magnitude))
 # print("length of origin leng:", len(orig))
-plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Magnitude (V)",
-title = "",file_name= '10-mag.pdf')
+# plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Magnitude (V)",
+# title = "",file_name= '10-mag.pdf')
 
 #"Number of packet missing"   Magnitude(Volts) Phase Angle (Degrees)
 
-# plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Phase Angle (Degrees)",
-# title = "",file_name= '10-ang.pdf')
+plot_graph(magnitude,orig,np.arange(len(magnitude)),x_label = "Missing packet index",y_label = "Phase Angle (Deg)",
+title = "",file_name= '10-ang.pdf')

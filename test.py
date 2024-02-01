@@ -28,7 +28,7 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
 
     # Set the font to Times New Roman for all elements
     mpl.rcParams['font.family'] = 'Times New Roman'
-    plt.figure(figsize=(10, 5))  # Set the figure size (optional)
+    plt.figure(figsize=(10, 4))  # Set the figure size (optional)
 
     plt.plot(array1, array2, marker='o', linestyle='-', color='#0072BD',linewidth =3)
 
@@ -38,8 +38,8 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.ylim([0.2, 2])  # Sets the y-axis to range from 0 to 12
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=20)
-    plt.ylabel(y_label, fontsize=20)
+    plt.xlabel(x_label, fontsize=25)
+    plt.ylabel(y_label, fontsize=25)
     plt.title("")
 
     # Set the font size of the axis tick labels
@@ -260,5 +260,5 @@ if __name__ == "__main__":
         angRes.append(m)
 
     # print("angle ifference:", angRes)
-    plot_graph(5,error_x, angRes,phase_stands, x_label="Missing Data Rate (%)", y_label="Angle Difference (Degrees)", title="Phase Angle difference vs Missing Data Rate"
+    plot_graph(5,error_x, angRes,phase_stands, x_label="Missing Data Rate (%)", y_label="Angle Difference (Deg)", title="Phase Angle difference vs Missing Data Rate"
     ,file_name = "anglevsRate.pdf")

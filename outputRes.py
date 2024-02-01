@@ -37,8 +37,8 @@ def plot_graph(scale_factor,array1, array2, array3, x_label="X-axis", y_label="Y
     plt.errorbar(array1, array2, yerr=scaled_array3, fmt='o', color='#0072BD', capsize=5)
 
     # Add labels and title
-    plt.xlabel(x_label, fontsize=20)
-    plt.ylabel(y_label, fontsize=20)
+    plt.xlabel(x_label, fontsize=25)
+    plt.ylabel(y_label, fontsize=25)
     plt.title("")
 
     # Set y-axis to scientific notation
